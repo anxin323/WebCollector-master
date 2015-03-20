@@ -17,14 +17,15 @@
  */
 package cn.edu.hfut.dmic.webcollector.fetcher;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatum;
 import cn.edu.hfut.dmic.webcollector.model.Links;
 import cn.edu.hfut.dmic.webcollector.util.BerkeleyDBUtils;
+
 import com.sleepycat.je.Database;
-import com.sleepycat.je.DatabaseConfig;
 import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.Environment;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 爬取过程中，写入爬取历史、网页Content、解析信息的Writer

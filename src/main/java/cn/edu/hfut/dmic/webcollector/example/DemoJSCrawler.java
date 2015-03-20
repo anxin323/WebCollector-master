@@ -21,9 +21,16 @@ package cn.edu.hfut.dmic.webcollector.example;
 import cn.edu.hfut.dmic.webcollector.crawler.DeepCrawler;
 import cn.edu.hfut.dmic.webcollector.model.Links;
 import cn.edu.hfut.dmic.webcollector.model.Page;
+
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
+
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
@@ -44,17 +51,41 @@ public class DemoJSCrawler extends DeepCrawler{
         HtmlUnitDriver driver=page.getDriver(BrowserVersion.CHROME);
         /*HtmlUnitDriver也可以像Jsoup一样用CSS SELECTOR抽取数据
           关于HtmlUnitDriver的文档请查阅selenium相关文档*/
-        List<WebElement> divInfos=driver.findElementsByCssSelector("h3>a[id^=uigs]");
-        for(WebElement divInfo:divInfos){
-            System.out.println(divInfo.getText());
-        }
+        System.out.println(driver.getPageSource());
+//        List<WebElement> divInfos=driver.findElementsByCssSelector("h3>a[id^=uigs]");
+//        for(WebElement divInfo:divInfos){
+//            System.out.println(page.getUrl()+":divInfo="+divInfo.getText());
+//            try {
+//				saveData(page.getUrl()+":divInfo="+divInfo.getText()+"\n");
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//        }
         return null;
     }
     
+ 	private static void saveData(String data) throws IOException {
+ 		String fileName="data-sina.txt";
+ 		File out = new File(
+ 				"F:\\others\\sougou\\"+fileName);
+ 		if (!out.exists())
+ 			out.createNewFile();
+ 		BufferedWriter bw = new BufferedWriter(new FileWriter(out,true));
+// 		bw.append(data);
+ 		bw.write(data);
+// 		bw.newLine();
+ 		if (bw != null) {
+ 			bw.close();
+ 			bw = null;
+ 		}
+ 	}
+    
     public static void main(String[] args) throws Exception{
-        DemoJSCrawler crawler=new DemoJSCrawler("/home/hu/data/wb");
+        DemoJSCrawler crawler=new DemoJSCrawler("F:\\others\\sogou");
         for(int page=1;page<=5;page++)
-        crawler.addSeed("http://www.sogou.com/web?query="+URLEncoder.encode("编程")+"&page="+page);
+//        crawler.addSeed("http://www.sogou.com/web?query="+URLEncoder.encode("编程")+"&page="+page);
+        crawler.addSeed("http://finance.sina.com.cn/data/#stock/");
         crawler.start(1);
     }
     

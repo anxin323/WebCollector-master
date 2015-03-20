@@ -50,9 +50,11 @@ public class Links extends ArrayList<String> {
         Elements as = doc.select("a[href]");
         for (Element a : as) {
             String href = a.attr("abs:href");
-            if (regexRule.satisfy(href)) {
-                this.add(href);
-            }
+            System.out.println("href==="+href);
+            this.add(href);
+//            if (regexRule.satisfy(href)) {
+//                this.add(href);
+//            }
         }
     }
     

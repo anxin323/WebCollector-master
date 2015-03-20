@@ -61,7 +61,7 @@ public class TutorialCrawler extends DeepCrawler {
     public TutorialCrawler(String crawlPath) {
         super(crawlPath);
 
-        regexRule.addRule("http://.*zhihu.com/.*");
+//        regexRule.addRule("http://.*zhihu.com/.*");
         regexRule.addRule("-.*jpg.*");
 
         /*创建一个JdbcTemplate对象,"mysql1"是用户自定义的名称，以后可以通过
@@ -73,12 +73,12 @@ public class TutorialCrawler extends DeepCrawler {
          获取同一个JdbcTemplate对象)             
          */
 
-      /*  try {
-            jdbcTemplate = JDBCHelper.createMysqlTemplate("mysql1",
-                    "jdbc:mysql://localhost/testdb?useUnicode=true&characterEncoding=utf8",
-                    "root", "password", 5, 30);
+        try {
+            jdbcTemplate = JDBCHelper.createMysqlTemplate("mysql",
+                    "jdbc:mysql://localhost/test?useUnicode=true&characterEncoding=utf8",
+                    "root", "root", 5, 30);
 
-            创建数据表
+            //创建数据表
             jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS tb_content ("
                     + "id int(11) NOT NULL AUTO_INCREMENT,"
                     + "title varchar(50),url varchar(200),html longtext,"
@@ -88,27 +88,28 @@ public class TutorialCrawler extends DeepCrawler {
         } catch (Exception ex) {
             jdbcTemplate = null;
             System.out.println("mysql未开启或JDBCHelper.createMysqlTemplate中参数配置不正确!");
-        }*/
+        }
     }
 
     @Override
     public Links visitAndGetNextLinks(Page page) {
         Document doc = page.getDoc();
         String title = doc.title();
+        //doc.body().text();
         System.out.println("******************************************");
         System.out.println("URL:" + page.getUrl());
         System.out.println("Titlt:" + title);
-        System.out.println("Html:" + page.getHtml());
+        //System.out.println("doc.body():" + doc.body().text());
         System.out.println("******************************************");
 
         /*将数据插入mysql*/
-       /* if (jdbcTemplate != null) {
+        if (jdbcTemplate != null) {
             int updates=jdbcTemplate.update("insert into tb_content (title,url,html) value(?,?,?)",
                     title, page.getUrl(), page.getHtml());
             if(updates==1){
                 System.out.println("mysql插入成功");
             }
-        }*/
+        }
 
         /*下面是2.0版本新加入的内容*/
         /*抽取page中的链接返回，这些链接会在下一轮爬取时被爬取。
@@ -127,13 +128,15 @@ public class TutorialCrawler extends DeepCrawler {
     }
 
     public static void main(String[] args) throws Exception {
-        /*构造函数中的string,是爬虫的crawlPath，爬虫的爬取信息都存在crawlPath文件夹中,
+    	//String url = "http://s.1688.com/caigou/offer_search.htm?spm=b26110225.7145030.0.0.dvaX8D&keywords=%BC%E0%BF%D8%C9%E3%CF%F1%BB%FA&n=y&from=industrySearch&industryFlag=jicai";
+    	String url="http://news.163.com/";
+    	/*构造函数中的string,是爬虫的crawlPath，爬虫的爬取信息都存在crawlPath文件夹中,
           不同的爬虫请使用不同的crawlPath
         */
         //TutorialCrawler crawler = new TutorialCrawler("/home/hu/data/wb");
-        TutorialCrawler crawler = new TutorialCrawler("F:\\Git\\MyWebCollector");
-        crawler.setThreads(50);
-        crawler.addSeed("http://www.zhihu.com/");
+        TutorialCrawler crawler = new TutorialCrawler("F:\\others\\MyWebCollector");
+        crawler.setThreads(10);
+        crawler.addSeed(url);
         crawler.setResumable(false);
 
         /*2.x版本直接支持多代理随机切换*/

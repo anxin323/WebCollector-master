@@ -17,6 +17,16 @@
  */
 package cn.edu.hfut.dmic.webcollector.fetcher;
 
+import java.io.IOException;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cn.edu.hfut.dmic.webcollector.generator.StandardGenerator;
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatum;
 import cn.edu.hfut.dmic.webcollector.model.Links;
@@ -24,15 +34,6 @@ import cn.edu.hfut.dmic.webcollector.model.Page;
 import cn.edu.hfut.dmic.webcollector.net.HttpRequester;
 import cn.edu.hfut.dmic.webcollector.net.HttpResponse;
 import cn.edu.hfut.dmic.webcollector.util.Config;
-
-import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * deep web抓取器
@@ -269,6 +270,7 @@ public class Fetcher {
                                 LOG.info("retry " + retryCount + "th " + url);
                             }
                             try {
+                            	LOG.info("线程【"+Thread.currentThread().getName()+"】:"+url);
                                 response = httpRequester.getResponse(url);
                                 break;
                             } catch (Exception ex) {
@@ -368,7 +370,8 @@ public class Fetcher {
      * @param generator 给抓取提供任务的Generator(抓取任务生成器)
      * @throws IOException
      */
-    public void fetchAll(StandardGenerator generator) throws Exception {
+    @SuppressWarnings("deprecation")
+	public void fetchAll(StandardGenerator generator) throws Exception {
         if (visitorFactory == null) {
             LOG.info("Please specify a VisitorFactory!");
             return;
