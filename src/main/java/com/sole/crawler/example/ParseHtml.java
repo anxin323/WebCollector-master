@@ -176,26 +176,25 @@ public class ParseHtml {
 
 	public static void main(String[] args) throws IOException {
 		
-		String url = "http://news.163.com/"; 
-		String html = ParseHtml.fetchHtml(url);
-		ParseHtml.saveData(html);
+//		String url = "http://news.163.com/"; 
+//		String html = ParseHtml.fetchHtml(url);
+//		ParseHtml.saveData(html);
 		
-//		for (int i = 1; i <= 16; i++) {
-//			System.out.println("----------------------"+i+"------------------------");
-//			int page = i;
-//			String url = "http://news.163.som"; 
-//					//"http://s.1688.com/caigou/offer_search.htm?spm=b26110225.7145030.0.0.dvaX8D&keywords=%BC%E0%BF%D8%C9%E3%CF%F1%BB%FA&n=y&from=industrySearch&industryFlag=jicai#beginPage=";
-//			url = url + page;
-//			System.out.println("----------"+url);
-//			String html = ParseHtml.fetchHtml(url);
-//			ParseHtml.saveDB(ParseHtml.parse(html)); 
-//			
-//			try {
-//				Thread.sleep(1000);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//		}
+		for (int i = 1; i <= 10; i++) {
+			System.out.println("----------------------"+i+"------------------------");
+			int page = i+3;
+			String url = "http://s.1688.com/caigou/offer_search.htm?spm=b26110225.7145030.0.0.dvaX8D&keywords=%BC%E0%BF%D8%C9%E3%CF%F1%BB%FA&n=y&from=industrySearch&industryFlag=jicai#beginPage=";
+			url = url + page;
+			System.out.println("----------"+url);
+			String html = ParseHtml.fetchHtml(url);
+			ParseHtml.saveDB(ParseHtml.parse(html)); 
+			
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		     
 	}
 
